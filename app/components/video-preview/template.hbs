@@ -1,0 +1,5 @@
+<video autoplay muted></video>
+
+{{#each faceDetector.faces as |face|}}
+  {{video-preview/box model=face}}
+{{/each}}

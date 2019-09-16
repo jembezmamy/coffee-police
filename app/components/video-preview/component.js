@@ -1,22 +1,17 @@
 import Component from '@ember/component';
 import { inject as service } from '@ember/service';
-import DOMListener from 'coffee-police/utils/dom-listener';
 
 export default Component.extend({
-  tagName: 'video',
-  webcam: service(),
 
-  DOMListener,
+  webcam: service(),
+  faceDetector: service(),
 
   didInsertElement() {
     this._super(...arguments);
-    this.webcam.promise.then(
-      (stream) => this.element.srcObject = stream
+    this.webcam.start().then(
+      () => this.faceDetector.start()
+    ).then(
+      () => this.element.querySelector('video').srcObject = this.webcam.stream
     );
-    this.DOMListener.add('loadedmetadata', this.autoPlay);
-  },
-
-  autoPlay() {
-    this.element.play();
   }
 });
