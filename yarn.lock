@@ -1007,6 +1007,16 @@
   resolved "https://registry.yarnpkg.com/@orbit/immutable/-/immutable-0.16.1.tgz#888458cd99d62704701cf685e059bebaa38837c4"
   integrity sha512-IqwhSM2VRcg1FIZI+8oTvsjk6FKDGo5v54dNpqBb9Gr1mhpcPdjFbroiwnFWTEiNqyd7vUvWhqEul4UNUTJ3Kw==
 
+"@orbit/indexeddb@^0.16.1":
+  version "0.16.1"
+  resolved "https://registry.yarnpkg.com/@orbit/indexeddb/-/indexeddb-0.16.1.tgz#1be96098cdf7fac4f7c5c59ad37fa36236870e69"
+  integrity sha512-EqB26ogbfaqyxpqQjDcipFHdaXXS3lqJqZcEh3m+TnN28cksHvNLG8gwINW681r8SBZWQT7np5BQhPMB0DbsRA==
+  dependencies:
+    "@orbit/core" "^0.16.1"
+    "@orbit/data" "^0.16.1"
+    "@orbit/record-cache" "^0.16.1"
+    "@orbit/utils" "^0.16.1"
+
 "@orbit/memory@^0.16.1":
   version "0.16.1"
   resolved "https://registry.yarnpkg.com/@orbit/memory/-/memory-0.16.1.tgz#4e09561ba4b8d22016306c964a3b84f51ab0aa13"
