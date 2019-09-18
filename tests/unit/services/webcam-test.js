@@ -2,6 +2,7 @@ import { module, test } from 'qunit';
 import { setupTest } from 'ember-qunit';
 import sinon from 'sinon';
 import { resolve } from 'rsvp';
+import { sampleVideo } from 'coffee-police/tests/helpers/image';
 
 module('Unit | Service | webcam', function(hooks) {
   setupTest(hooks);
@@ -19,6 +20,17 @@ module('Unit | Service | webcam', function(hooks) {
     this.mediaDevicesStub.restore();
   });
 
+  test('it detects lack of user media support', function(assert) {
+    this.mediaDevices.getUserMedia = null;
+
+    assert.notOk(this.service.isSupported);
+
+    this.service.setup().then(
+      () => assert.ok(false),
+      (error) => assert.equal(error, 'This browser doesn’t support user media')
+    );
+  });
+
   test('it retrieves video stream', async function(assert) {
     assert.ok(this.service.isSupported);
     assert.notOk(this.service.isReady);
@@ -31,9 +43,21 @@ module('Unit | Service | webcam', function(hooks) {
     assert.ok(this.service.isReady);
     assert.equal(this.service.stream, this.stream);
     assert.ok(this.service.video.srcObject, this.stream);
+  });
 
-    let play = sinon.stub(this.service.video, 'play');
-    let pause = sinon.stub(this.service.video, 'pause');
+  test('it plays video', async function(assert) {
+    let setupSpy = sinon.spy(this.service, 'setup');
+    let play = sinon.stub();
+    let pause = sinon.stub();
+    this.service.reopen({
+      video: Object.freeze({  play, pause })
+    });
+
+    await this.service.start();
+
+    assert.ok(setupSpy.calledOnce);
+    assert.ok(play.calledOnce);
+    assert.equal(this.service.isPlaying, true);
 
     await this.service.start();
 
@@ -42,16 +66,22 @@ module('Unit | Service | webcam', function(hooks) {
     await this.service.stop();
 
     assert.ok(pause.calledOnce);
+    assert.equal(this.service.isPlaying, false);
   });
 
-  test('it detects lack of user media support', function(assert) {
-    this.mediaDevices.getUserMedia = null;
+  test('it captures video frame', async function(assert) {
+    let startSpy = sinon.spy(this.service, 'start');
+    let sourceImage = sampleVideo();
+    sinon.stub(this.service, 'video').value(sourceImage);
 
-    assert.notOk(this.service.isSupported);
+    await this.service.getFrame().then((frame) => {
+      assert.equal(frame.toDataURL(), sourceImage.toDataURL());
+    }, (error) => {
+      assert.ok(false, error);
+    });
 
-    this.service.setup().then(
-      () => assert.ok(false),
-      (error) => assert.equal(error, 'This browser doesn’t support user media')
-    );
+    assert.ok(startSpy.calledOnce);
+    assert.ok(sourceImage.play.calledOnce);
+    assert.ok(sourceImage.pause.calledOnce);
   });
 });
