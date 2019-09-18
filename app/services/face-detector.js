@@ -2,10 +2,12 @@ import Service from '@ember/service';
 import FaceAPI from 'face-api.js';
 import { all } from 'rsvp';
 import { inject as service } from '@ember/service';
-import { next } from '@ember/runloop';
+import { next, cancel } from '@ember/runloop';
 
 export default Service.extend({
   webcam:       service(),
+
+  FaceAPI,
 
   isReady:      false,
   isDetecting:  false,
@@ -13,7 +15,7 @@ export default Service.extend({
   setup() {
     return this.loadPromise = this.loadPromise || all(
       ['ssdMobilenetv1', 'faceRecognitionNet', 'faceLandmark68Net'].map(
-        (net) => FaceAPI.nets[net].loadFromUri('/models')
+        (net) => this.FaceAPI.nets[net].loadFromUri('/models')
       )
     ).then(
       () => this.set('isReady', true)
@@ -31,13 +33,18 @@ export default Service.extend({
 
   detect() {
     return this.setup().then(
-      () => FaceAPI.detectAllFaces(this.webcam.video).withFaceLandmarks().withFaceDescriptors()
+      () => this.FaceAPI.detectAllFaces(this.webcam.video).withFaceLandmarks().withFaceDescriptors()
     ).then((faces) => {
       this.set('faces', faces);
       if (this.isDetecting) {
-        next(this, this.detect);
+        this.nextRun = next(this, this.detect);
       }
       return faces;
     });
+  },
+
+  willDestroy() {
+    this._super(...arguments);
+    cancel(this.nextRun);
   }
 });
