@@ -4687,6 +4687,14 @@ ember-template-lint@^1.1.0:
     resolve "^1.1.3"
     strip-bom "^3.0.0"
 
+ember-test-assets@^1.1.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/ember-test-assets/-/ember-test-assets-1.1.1.tgz#bc1ffa51df8568c620fbca3d4ad47ad52fd41d73"
+  integrity sha512-vxIaJ6ikceo8VyEAp/5jkyyNY+R/wCOzCgmosAPEnMGA2mrCOfM2KgIaetOOw7maNTXfYPr75WMX4T2d6tRvww==
+  dependencies:
+    broccoli-funnel "^1.0.1"
+    ember-cli-babel "^6.6.0"
+
 ember-test-selectors@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/ember-test-selectors/-/ember-test-selectors-2.1.0.tgz#faebdf06702aaa0bc510d55eb721ce54d2e85793"

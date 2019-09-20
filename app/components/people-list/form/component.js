@@ -5,13 +5,21 @@ export default Component.extend({
   tagName: 'form',
   'data-test-person-form': true,
 
+  faceDetector: service(),
   store: service(),
 
   actions: {
     submit() {
-      this.store.addRecord({
-        type: 'person',
-        name: this.name
+      this.faceDetector.detect().then((faces) => {
+        if (faces[0]) {
+          return this.store.addRecord({
+            type: 'person',
+            name: this.name,
+            image: faces[0].image.toDataURL()
+          });
+        } else {
+          throw 'no face detected';
+        }
       }).then(
         () => this.set('name', '')
       );

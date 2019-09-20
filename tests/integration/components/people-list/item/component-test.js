@@ -11,6 +11,7 @@ module('Integration | Component | people-list/item', function(hooks) {
     this.model = {
       id: 242,
       name: 'Sofia',
+      image: '/assets/images/face-1.jpg',
       remove: sinon.stub()
     };
     await render(hbs`{{people-list/item model=model}}`);
@@ -19,6 +20,7 @@ module('Integration | Component | people-list/item', function(hooks) {
   test('it renders', async function(assert) {
     assert.dom('[data-test-person]').exists();
     assert.dom(this.element).includesText('Sofia');
+    assert.dom('img').hasAttribute('src', /face-1.jpg/);
   });
 
   test('it removes records', async function(assert) {
