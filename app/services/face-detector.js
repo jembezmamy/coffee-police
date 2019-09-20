@@ -33,7 +33,9 @@ export default Service.extend({
 
   detect() {
     return this.setup().then(
-      () => this.FaceAPI.detectAllFaces(this.webcam.video).withFaceLandmarks().withFaceDescriptors()
+      () => this.webcam.getFrame()
+    ).then(
+      (frame) => this.FaceAPI.detectAllFaces(frame).withFaceLandmarks().withFaceDescriptors()
     ).then((faces) => {
       this.set('faces', faces);
       if (this.isDetecting) {

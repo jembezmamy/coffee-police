@@ -9,8 +9,8 @@ module('Unit | Service | face-detector', function(hooks) {
   setupTest(hooks);
 
   hooks.beforeEach(function() {
-    this.video = document.createElement('video');
-    sinon.stub(this.owner.lookup('service:webcam'), 'video').value(this.video);
+    this.frame = document.createElement('canvas');
+    this.getFrame = sinon.stub(this.owner.lookup('service:webcam'), 'getFrame').returns(resolve(this.frame));
     this.faces = [];
     this.FaceAPIStub = {
       nets: {
@@ -40,6 +40,7 @@ module('Unit | Service | face-detector', function(hooks) {
   });
 
   test('it detects faces', async function(assert) {
+
     let setupSpy = sinon.spy(this.service, 'setup');
 
     await this.service.detect().then(
@@ -48,7 +49,8 @@ module('Unit | Service | face-detector', function(hooks) {
     );
 
     assert.ok(setupSpy.calledOnce);
-    assert.equal(this.FaceAPIStub.detectAllFaces.getCall(0).args[0], this.video);
+    assert.ok(this.getFrame.calledOnce);
+    assert.equal(this.FaceAPIStub.detectAllFaces.getCall(0).args[0], this.frame);
     assert.equal(this.service.faces, this.faces);
   });
 
