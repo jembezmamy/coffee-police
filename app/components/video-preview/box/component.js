@@ -7,7 +7,7 @@ export default Component.extend({
 
   'data-test-box': true,
 
-  box: reads('model.alignedRect.box'),
+  box: reads('model.box'),
 
   style: computed('box.{left,top,width,height}', function() {
     return ['left', 'top', 'width', 'height'].map(
