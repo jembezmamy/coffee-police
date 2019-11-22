@@ -11,7 +11,7 @@ module('Integration | Component | people-list/item', function(hooks) {
     this.model = {
       id: 242,
       name: 'Sofia',
-      image: '/assets/images/face-1.jpg',
+      image: '/images/face-1.jpg',
       remove: sinon.stub()
     };
     await render(hbs`{{people-list/item model=model}}`);
