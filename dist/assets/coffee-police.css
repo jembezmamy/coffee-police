@@ -1,0 +1,23 @@
+.__video-preview__a2de0 {
+  position: relative;
+}
+
+.__people-list__item__d0139__image {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  vertical-align: middle;
+}
+
+.__video-preview__box__727e3 {
+  border: 1px solid blue;
+  position: absolute;
+  color: blue;
+}
+.__video-preview__box__727e3--confident {
+  border-color: lime;
+  color: lime;
+}
+
+/*# sourceMappingURL=coffee-police.css.map */
