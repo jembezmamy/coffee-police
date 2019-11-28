@@ -7,6 +7,7 @@ import EmberObject, { computed } from '@ember/object';
 import { reads } from '@ember/object/computed';
 import ObjectProxy from '@ember/object/proxy';
 import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
+import ENV from 'coffee-police/config/environment';
 
 const CONFIDENCE_THRESHOLD = 0.5;
 const PROBABILITY_THRESHOLD = 0.8;
@@ -25,7 +26,7 @@ export default Service.extend({
   setup() {
     return this.loadPromise = this.loadPromise || all(
       ['ssdMobilenetv1', 'faceRecognitionNet', 'faceLandmark68Net'].map(
-        (net) => this.FaceAPI.nets[net].loadFromUri('/models')
+        (net) => this.FaceAPI.nets[net].loadFromUri(`${ENV.rootURL}models`)
       )
     ).then(
       () => this.store.liveQuery(q => q.findRecords('person')).then(
