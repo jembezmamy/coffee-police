@@ -9,6 +9,7 @@ import ObjectProxy from '@ember/object/proxy';
 import PromiseProxyMixin from '@ember/object/promise-proxy-mixin';
 
 const CONFIDENCE_THRESHOLD = 0.5;
+const PROBABILITY_THRESHOLD = 0.8;
 
 const ObjectPromiseProxy = ObjectProxy.extend(PromiseProxyMixin);
 
@@ -114,6 +115,10 @@ export const FaceMatcher = EmberObject.extend({
 export const Face = EmberObject.extend({
   box: reads('detection.detection.box'),
 
+  size: computed('box', function() {
+    return this.box.width * this.box.height;
+  }),
+
   image: computed('box', 'frame', function() {
     let canvas = document.createElement('canvas');
     let box = expand(this.box, this.frame, (this.box.width + this.box.height) / 4);
@@ -131,7 +136,13 @@ export const Face = EmberObject.extend({
     let matched = this.matches.filter(
       (m) => m.distance < CONFIDENCE_THRESHOLD
     );
-    return matched.length === 1 ? matched[0].person : null;
+    return matched.length === 1 ? matched[0] : null;
+  }),
+
+  probableMatches: computed('matches', function() {
+    return this.matches.filter(
+      (m) => m.distance >= CONFIDENCE_THRESHOLD && m.distance < PROBABILITY_THRESHOLD
+    );
   })
 });
 

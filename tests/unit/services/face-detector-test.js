@@ -159,5 +159,32 @@ module('Unit | Service | face-detector', function(hooks) {
       assert.equal(face.image.width, 56 + offset);
       assert.equal(face.image.height, 78 + offset);
     });
+
+    test('it picks probable and confident matches', async function(assert) {
+      const A = { distance: 0.9, person: 'A' };
+      const B = { distance: 0.6, person: 'B' };
+      const C = { distance: 0.1, person: 'C' };
+      const D = { distance: 0.7, person: 'D' };
+      let face = Face.create({
+        matches: [ A, B, C, D ]
+      });
+
+      assert.equal(face.confidentMatch, C);
+      assert.deepEqual(face.probableMatches, [B, D]);
+    });
+
+    test('it computes face size', async function(assert) {
+      let box = {
+        left:   12,
+        top:    34,
+        width:  56,
+        height: 78
+      };
+      let face = Face.create({
+        detection: { detection: { box }}
+      });
+
+      assert.equal(face.size, 56 * 78);
+    });
   });
 });
