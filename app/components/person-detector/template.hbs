@@ -1,0 +1,19 @@
+<button type="button" name="detect" disabled={{isDetecting}} {{action "detect"}}>
+  Detect!
+</button>
+
+{{#if results}}
+  {{#if results.length}}
+    Hi,
+    {{#each results as |person|}}
+      {{person.name}},
+    {{/each}}
+    or someone else...?
+  {{else}}
+    Hi, {{results.name}}!
+  {{/if}}
+{{else}}
+  {{#if didDetect}}
+    Do we know each other...?
+  {{/if}}
+{{/if}}

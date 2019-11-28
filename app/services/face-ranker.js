@@ -2,6 +2,7 @@ import Service, { inject as service } from '@ember/service';
 import { Promise } from 'rsvp';
 import { next } from '@ember/runloop';
 import { assign } from '@ember/polyfills';
+import { isArray } from '@ember/array';
 
 export default Service.extend({
   faceDetector: service(),
@@ -28,7 +29,7 @@ function performDetection(faceDetector, minTime, maxTime, results) {
     let rankedResults = rankResults(results);
     if (Date.now() >= maxTime) {
       return rankedResults;
-    } else if (Date.now() >= minTime && rankedResults && rankedResults.length) {
+    } else if (Date.now() >= minTime && rankedResults && !isArray(rankedResults)) {
       return rankedResults;
     } else {
       return new Promise(
